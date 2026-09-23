@@ -4,6 +4,8 @@
  * Usage:
  *   const arduino = new ArduinoSerial({ baudRate: 115200 });
  *   arduino.onLine = (line) => { ... };
+ *   arduino.onValue = (value) => { ... }; // fires when a line parses as a number
+ *   // or just read arduino.value at any time (last parsed number, or null)
  *
  * The library manages its own "Connect to Arduino" button (shown only while
  * disconnected) and auto-reconnects to a previously authorized device on
@@ -18,7 +20,10 @@ class ArduinoSerial {
     this._buffer = "";
     this._status = "disconnected";
 
+    this._value = null;
+
     this.onLine = null; // (line: string) => void
+    this.onValue = null; // (value: number) => void, optional - fires when a line parses as a number
     this.onStatusChange = null; // (status: string) => void, optional
     this.onError = null; // (error: Error) => void, optional - defaults to console.error
 
@@ -39,6 +44,11 @@ class ArduinoSerial {
 
   get isConnected() {
     return this._status === "connected";
+  }
+
+  /** Last line that successfully parsed as a number, or null if none yet. */
+  get value() {
+    return this._value;
   }
 
   /** Prompt the user to pick a port. Must be called from a user gesture (e.g. a click). */
@@ -126,8 +136,17 @@ class ArduinoSerial {
         this._buffer += value;
         const lines = this._buffer.split("\n");
         this._buffer = lines.pop();
-        for (const line of lines) {
-          if (this.onLine) this.onLine(line.trim());
+        for (const rawLine of lines) {
+          const line = rawLine.trim();
+          if (this.onLine) this.onLine(line);
+
+          if (line !== "") {
+            const parsed = Number(line);
+            if (!Number.isNaN(parsed)) {
+              this._value = parsed;
+              if (this.onValue) this.onValue(parsed);
+            }
+          }
         }
       }
     } catch (err) {
