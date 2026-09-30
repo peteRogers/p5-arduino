@@ -1,22 +1,34 @@
 let latestMessage = "waiting...";
+let drums;
 
 const arduino = new ArduinoSerial({ baudRate: 115200 });
 arduino.onLine = (line) => {
   latestMessage = line;
 };
 
-function setup() {
+async function setup() {
   createCanvas(windowWidth, windowHeight);
+  //drums = await loadSound('drums.wav');
+  //drums.loop(true);
+}
+
+
+
+function draw() {
+  background(220);
+  circle(width/2, height/2, arduino.value);
+  // drums.rate(map(arduino.value, 0, 1023, 0, 2))
 }
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
 
-function draw() {
-  background(220);
-  textSize(16);
-  text('Last message: ' + latestMessage, 20, 100);
-  text('Numeric value: ' + (arduino.value !== null ? arduino.value : 'n/a'), 20, 130);
-  text('Status: ' + arduino.status, 20, 160);
+// Browsers block audio until a user gesture, so start the loop on the first click
+function mousePressed() {
+  if (drums && !drums.playing) {
+    drums.start();
+  }else{
+    drums.stop()
+  }
 }
