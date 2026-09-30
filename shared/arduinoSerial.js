@@ -8,7 +8,8 @@
  *   // or just read arduino.value at any time (last parsed number, or null)
  *
  * The library manages its own "Connect to Arduino" button (shown only while
- * disconnected) and auto-reconnects to a previously authorized device on
+ * disconnected), a small "Disconnect" button (shown only while connected),
+ * and auto-reconnects to a previously authorized device on
  * page load, so nothing else needs to be wired up in the sketch.
  */
 class ArduinoSerial {
@@ -29,7 +30,10 @@ class ArduinoSerial {
     this.onStatusChange = null; // (status: string) => void, optional
     this.onError = null; // (error: Error) => void, optional - defaults to console.error
 
-    this._button = this._createConnectButton(buttonLabel);
+    this._button = this._createButton(buttonLabel, () => this.connect());
+    this._disconnectButton = this._createButton("Disconnect", () => this.disconnect());
+    this._disconnectButton.style.fontSize = "11px";
+    this._disconnectButton.style.display = "none";
 
     if (typeof navigator !== "undefined" && navigator.serial) {
       navigator.serial.addEventListener("disconnect", (event) => {
@@ -85,14 +89,14 @@ class ArduinoSerial {
     }
   }
 
-  _createConnectButton(label) {
+  _createButton(label, onClick) {
     const button = document.createElement("button");
     button.textContent = label;
     button.style.position = "absolute";
     button.style.top = "10px";
     button.style.left = "10px";
     button.style.zIndex = 1000;
-    button.addEventListener("click", () => this.connect());
+    button.addEventListener("click", onClick);
     document.body.appendChild(button);
     return button;
   }
@@ -192,6 +196,7 @@ class ArduinoSerial {
   _setStatus(status) {
     this._status = status;
     this._button.style.display = status === "disconnected" ? "" : "none";
+    this._disconnectButton.style.display = status === "connected" ? "" : "none";
     if (this.onStatusChange) this.onStatusChange(status);
   }
 
