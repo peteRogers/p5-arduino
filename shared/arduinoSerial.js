@@ -17,6 +17,8 @@ class ArduinoSerial {
     this.port = null;
     this.reader = null;
     this.writer = null;
+    this._readableClosed = null; // resolves once port.readable is unlocked
+    this._writableClosed = null; // resolves once port.writable is unlocked
     this._buffer = "";
     this._status = "disconnected";
 
@@ -57,6 +59,8 @@ class ArduinoSerial {
       this._fail(new Error("Web Serial API not supported in this browser."));
       return;
     }
+    // Already connected or mid-connect (e.g. auto-connect is still opening the port).
+    if (this._status !== "disconnected") return;
     try {
       const port = await navigator.serial.requestPort();
       await this._openPort(port);
@@ -94,7 +98,7 @@ class ArduinoSerial {
   }
 
   async _tryAutoConnect() {
-    if (!navigator.serial) return;
+    if (!navigator.serial || this._status !== "disconnected") return;
     try {
       const ports = await navigator.serial.getPorts();
       if (ports.length > 0) await this._openPort(ports[0]);
@@ -115,12 +119,12 @@ class ArduinoSerial {
     this.port = port;
 
     const textDecoder = new TextDecoderStream();
-    port.readable.pipeTo(textDecoder.writable).catch(() => {});
+    this._readableClosed = port.readable.pipeTo(textDecoder.writable).catch(() => {});
     this.reader = textDecoder.readable.getReader();
 
     if (port.writable) {
       const textEncoder = new TextEncoderStream();
-      textEncoder.readable.pipeTo(port.writable).catch(() => {});
+      this._writableClosed = textEncoder.readable.pipeTo(port.writable).catch(() => {});
       this.writer = textEncoder.writable.getWriter();
     }
 
@@ -172,6 +176,11 @@ class ArduinoSerial {
       } catch (_) {}
       this.writer = null;
     }
+    // The port can only close once both pipes have finished and released its streams.
+    await this._readableClosed;
+    await this._writableClosed;
+    this._readableClosed = null;
+    this._writableClosed = null;
     if (this.port) {
       try {
         await this.port.close();
@@ -182,7 +191,7 @@ class ArduinoSerial {
 
   _setStatus(status) {
     this._status = status;
-    this._button.style.display = status === "connected" ? "none" : "";
+    this._button.style.display = status === "disconnected" ? "" : "none";
     if (this.onStatusChange) this.onStatusChange(status);
   }
 
