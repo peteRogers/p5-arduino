@@ -30,8 +30,6 @@ arduino.onValue = (value) => {
 async function setup() {
   createCanvas(windowWidth, windowHeight);
   knock = await loadSound('knocker.mp3');
-  //drums = await loadSound('drums.wav');
-  //drums.loop(true);
 }
 
 
@@ -39,7 +37,7 @@ async function setup() {
 function draw() {
   background(220);
   circle(width/2, height/2, arduino.value);
-  // drums.rate(map(arduino.value, 0, 1023, 0, 2))
+ 
 }
 
 function windowResized() {
@@ -49,10 +47,5 @@ function windowResized() {
 // Browsers block audio until a user gesture, so unlock it on the first click
 function mousePressed() {
   userStartAudio();
-  if (!drums) return;
-  if (drums && !drums.playing) {
-    drums.start();
-  }else{
-    drums.stop()
-  }
+ 
 }
