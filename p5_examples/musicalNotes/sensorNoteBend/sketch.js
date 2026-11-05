@@ -1,7 +1,7 @@
 const arduino = new ArduinoSerial({ baudRate: 115200 });
 const notes = new Notes();
 
-const NOTE = "A";
+const NOTE = "A1";
 const SENSOR_MAX = 1100; // at this value and above the pitch is at its highest
 const SEMITONES = 12; // how far the pitch rises at SENSOR_MAX (12 = one octave)
 

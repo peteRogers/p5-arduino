@@ -19,7 +19,7 @@ function setup() {
 function draw() {
   background(220);
 
-  // arduino.value is null until the first reading arrives, so stay still until then
+  
   const reading = arduino.value ?? SENSOR_MAX;
   // Lower readings give more movement: 0 gives 1, SENSOR_MAX and above give 0
   const target = 1 - constrain(reading / SENSOR_MAX, 0, 1);
