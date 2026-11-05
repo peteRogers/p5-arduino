@@ -5,7 +5,9 @@ p5.js sketches that talk to an Arduino over the Web Serial API.
 ## Structure
 
 - `readSensor/` — the simplest starting point: shows one sensor's value as text on the canvas.
-- `readSensorRopes/` — `readSensor` with ropes: 50 hanging ropes that are waviest at a sensor value of 0 and still at 1100 and above.
+- `ropes/` — sketches that use the `Rope` class from `rope.js`:
+  - `readSensorRopes/` — `readSensor` with ropes: 50 hanging ropes that are waviest at a sensor value of 0 and still at 1100 and above.
+  - `ropesExample/` — a rope hanging from the top of the screen that moves when the mouse passes through it. It doesn't need an Arduino.
 - `musicalNotes/` — sketches that play musical notes with `notes.js`:
   - `sensorNoteBend/` — plays one constant musical note, and a single sensor changes its pitch.
   - `sensorNotes/` — plays a different musical note for each of two Arduino buttons, for as long as it's held down.
@@ -14,7 +16,7 @@ p5.js sketches that talk to an Arduino over the Web Serial API.
 - `knock_knock/` — plays a sound when a single sensor goes above a threshold.
 - `twoSensors/` — plays a different sound for each of two sensors.
 
-Every sketch loads the `ArduinoSerial` class from the [share_resources](https://github.com/peteRogers/share_resources) repo, so there is one copy of it to maintain. It connects a p5.js sketch to an Arduino (or any serial device) over Web Serial.
+Every sketch that uses an Arduino loads the `ArduinoSerial` class from the [share_resources](https://github.com/peteRogers/share_resources) repo, so there is one copy of it to maintain. It connects a p5.js sketch to an Arduino (or any serial device) over Web Serial.
 
 ## Using `ArduinoSerial` in a new sketch
 
