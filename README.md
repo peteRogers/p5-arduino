@@ -6,7 +6,7 @@ p5.js sketches that talk to an Arduino over the Web Serial API.
 
 - `readSensor/` — the simplest starting point: shows one sensor's value as text on the canvas.
 - `readSensorRopes/` — `readSensor` with ropes: 50 hanging ropes that are waviest at a sensor value of 0 and still at 1100 and above.
-- `sensorNote/` — plays one musical note each time a single sensor goes above a threshold.
+- `sensorNote/` — plays one constant musical note, and a single sensor changes its pitch.
 - `simpleKnock/` — a shorter version of `knock_knock` that does everything in `draw()`.
 - `knock_knock/` — plays a sound when a single sensor goes above a threshold.
 - `twoSensors/` — plays a different sound for each of two sensors.
