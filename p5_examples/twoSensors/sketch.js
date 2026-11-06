@@ -9,8 +9,6 @@ function setup() {
 
 function draw() {
   background(220);
-  
-
   // One circle per button id, side by side
   for (let i = 0; i < NUM_BUTTONS; i++) {
     let x = (width * (i + 1)) / (NUM_BUTTONS + 1);
@@ -21,7 +19,6 @@ function draw() {
     } else {
       fill(0);
     }
-
     circle(x, height / 2, 50);
   }
 }
