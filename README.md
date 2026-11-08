@@ -1,10 +1,17 @@
 # p5-arduino
 
-p5.js sketches that talk to an Arduino over the Web Serial API.
+p5.js sketches that talk to an Arduino over the Web Serial API, the Arduino code that goes with them, and some p5.js examples that load JSON data.
+
+All the p5.js sketches use p5.js 2.3.4.
 
 ## Structure
 
 - `readSensor/` — the simplest starting point: shows one sensor's value as text on the canvas.
+
+### `p5_examples/`
+
+- `simpleKnock/` — plays a sound when a single sensor goes above 10. Everything happens in `draw()`.
+- `twoSensors/` — plays a different sound for each of two sensors.
 - `ropes/` — sketches that use the `Rope` class from `rope.js`:
   - `readSensorRopes/` — `readSensor` with ropes: 50 hanging ropes that are waviest at a sensor value of 0 and still at 1100 and above.
   - `ropesExample/` — a rope hanging from the top of the screen that moves when the mouse passes through it. It doesn't need an Arduino.
@@ -12,9 +19,28 @@ p5.js sketches that talk to an Arduino over the Web Serial API.
   - `sensorNoteBend/` — plays one constant musical note, and a single sensor changes its pitch.
   - `sensorNotes/` — plays a different musical note for each of two Arduino buttons, for as long as it's held down.
   - `screenNotes/` — `sensorNotes` with buttons drawn on the screen, so it doesn't need an Arduino.
-- `simpleKnock/` — a shorter version of `knock_knock` that does everything in `draw()`.
-- `knock_knock/` — plays a sound when a single sensor goes above a threshold.
-- `twoSensors/` — plays a different sound for each of two sensors.
+- `json_examples/` — sketches that load JSON with `loadJSON()`. None of them need an Arduino.
+  - `json_data/` — JSON data files to use in sketches: public airports, cities, CO₂ readings and temperatures.
+  - `planets/` — draws the planets from `planets.json`, placed by distance from the Sun and sized by how wide they are. `planets.js` is the starter and `fin.js` is the finished version, with the Sun and moons.
+  - `airports/` — draws every public airport on a world map from its latitude and longitude.
+  - `anime/` — gets 20 anime GIFs from the [nekos.best](https://nekos.best) API once, then shows a random one on each click.
+  - `anime_scroll/` — loads all 20 GIFs and scrolls them up the screen in one long column.
+  - `anime_cutout/` — the GIFs with the backgrounds removed by a machine-learning model, all playing at once on top of each other. It includes a Python script to make the cut-outs; see its own README.
+
+### `arduino_code/`
+
+- `buttons/` — reading push buttons on pin 7:
+  - `button/` — without debouncing, so one press sometimes counts twice.
+  - `button_bounce/` — the same button, debounced with the Bounce2 library.
+  - `multi_bounce/` — several debounced buttons; add a pin to the list for each new one.
+- `capacitance/` — an MPR121 touch sensor. Sends `pad>1` when one of its 12 pads is touched and `pad>0` when it's released.
+- `cap_simple/` — the same sensor, watching one pad only. Sends `1` when it's touched and `0` when it's released.
+- `Distance_Sensor_VL5310X/` — a VL53L0X distance sensor. Sends the distance in millimetres.
+- `display8x8/` — draws on an Adafruit 8×8 bicolour LED matrix.
+- `rgb_matrix/` — an 8×8 RGB NeoPixel matrix; see its own README:
+  - `starter/` — a starting point for drawing on the matrix.
+  - `scrollingText/` — scrolls a message across the matrix.
+  - `scrollingTextSerial/` — scrolls whatever text is sent to it over serial.
 
 Every sketch that uses an Arduino loads the `ArduinoSerial` class from the [share_resources](https://github.com/peteRogers/share_resources) repo, so there is one copy of it to maintain. It connects a p5.js sketch to an Arduino (or any serial device) over Web Serial.
 
@@ -103,7 +129,7 @@ Close the Arduino IDE's Serial Monitor before connecting from the browser, becau
 
 ## Playing sounds
 
-Both sketches load `p5.sound` and play sounds when a sensor crosses a threshold. Browsers block audio until the user interacts with the page, so click once after the page loads. If the Arduino reconnects automatically, there is no click on the Connect button to unlock it.
+`simpleKnock` and `twoSensors` load `p5.sound` and play sounds when a sensor crosses a threshold. Browsers block audio until the user interacts with the page, so click once after the page loads. If the Arduino reconnects automatically, there is no click on the Connect button to unlock it.
 
 ### Options
 
