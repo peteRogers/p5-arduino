@@ -4,10 +4,14 @@
 //
 // The cut-outs are animated WebP files. A canvas can only draw the first frame
 // of those, so instead each one is an image on the page (createImg).
-// The browser keeps them all animating. Images added later sit on top.
+// The browser keeps them all animating.
+// Every frame the layers move down one, so a different cut-out is on top.
 
 let cutouts = [];   // each one is { img, width, height }
 let message = "";
+
+let framesPerStep = 1;  // how many frames before the layers move down one (1 = every frame)
+let step = 0;           // how many times the layers have moved down so far
 
 async function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -38,6 +42,20 @@ function draw() {
     textAlign(CENTER, CENTER);
     textSize(20);
     text(message, width / 2, height / 2);
+    return;
+  }
+
+  if (frameCount % framesPerStep == 0) {
+    step++;
+  }
+
+  // every cut-out moves down one layer each step,
+  // and the one at the bottom goes back to the top.
+  // z-index sets the layer: the biggest number is drawn on top
+  let n = cutouts.length;
+  for (let i = 0; i < n; i++) {
+    let layer = (((i - step) % n) + n) % n;
+    cutouts[i].img.style("z-index", layer);
   }
 }
 

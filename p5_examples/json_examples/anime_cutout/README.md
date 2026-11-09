@@ -77,6 +77,6 @@ GIF transparency is all-or-nothing for each pixel, so cut-out edges look jagged.
 
 ### Why the sketch doesn't draw on the canvas
 
-A p5 canvas can only draw the first frame of an animated WebP. So each cut-out is added to the page as an image with `createImg()`, and the browser keeps it animating. Images added later sit on top, so the last cut-out in `cutouts.json` is the top layer.
+A p5 canvas can only draw the first frame of an animated WebP. So each cut-out is added to the page as an image with `createImg()`, and the browser keeps it animating. The sketch sets each image's `z-index` to choose which one is on top, and every frame they all move down one layer, with the bottom one going back to the top. Change `framesPerStep` in `sketch.js` to slow this down.
 
 Each GIF starts playing when it finishes loading and has its own length, so they don't start or loop in step with each other.
