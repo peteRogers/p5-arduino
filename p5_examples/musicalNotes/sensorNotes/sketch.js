@@ -4,7 +4,8 @@ const arduino = new ArduinoSerial({ baudRate: 115200 });
 const notes = new Notes();
 
 
-const NOTES = ["C4", "G4"];
+// 12 notes going up one semitone at a time from C3
+const NOTES = ["C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3", "G#3", "A3", "A#3", "B3"];
 
 let audioOn = false;
 let sounds = []; // the note each button is playing right now
@@ -32,8 +33,7 @@ function draw() {
 
   // One circle per note: white while its button is held down
   for (let i = 0; i < NOTES.length; i++) {
-    let x = (width * (i + 1)) / (NOTES.length + 1);
-
+    let x = columnX(i);
     if (arduino.sensors[i] == 1) {
       fill(255);
     } else {
@@ -57,4 +57,8 @@ function mousePressed() {
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
+}
+
+function columnX(i) {
+  return (width / (NOTES.length + 1)) * (i + 1);
 }

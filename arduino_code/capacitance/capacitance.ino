@@ -38,15 +38,14 @@ void loop() {
     if ((currtouched & bit(i)) && !(lasttouched & bit(i)) ) {
      
       Serial.print(i); 
-      Serial.print(">"); 
+      Serial.print(","); 
       Serial.println("1");
-      
       delay(1);
     }
     if (!(currtouched & bit(i)) && (lasttouched & bit(i)) ) {
       
       Serial.print(i); 
-      Serial.print(">"); 
+      Serial.print(","); 
       Serial.println("0");
       delay(1);
     }
