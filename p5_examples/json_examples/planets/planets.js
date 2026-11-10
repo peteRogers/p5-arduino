@@ -24,17 +24,8 @@ function draw() {
 
   for (let i = 0; i < planets.length; i++) {
     let planet = planets[i];
+    
 
-    // spread the planets out evenly
-   // let x = spreadX(i, planets.length);
-    fill(planet.color)
-    let x = map(planet.distance, 0, 4500, 10, width)
-    let dim = map(planet.size, 0, 143000, 5, 100)
-    circle(x, height/2, dim)
-    textAlign(CENTER);
-    fill(255)
-    text(planet.name, x, height/2 + 80)
-    noStroke(); // no outline, or the tiny dots just look black
 
 
 

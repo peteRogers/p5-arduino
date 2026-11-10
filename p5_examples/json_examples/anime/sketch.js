@@ -37,11 +37,11 @@ function draw() {
 
   fill(255);
   textSize(20);
-  if (loading) {
-    text("loading...", width / 2, height - 40);
-  } else {
-    text(animeName + "  (click for another " + category + ")", width / 2, height - 40);
-  }
+  // if (loading) {
+  //   text("loading...", width / 2, height - 40);
+  // } else {
+  //   text(animeName + "  (click for another " + category + ")", width / 2, height - 40);
+  // }
 }
 
 async function showRandomGif() {

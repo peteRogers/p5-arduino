@@ -6,7 +6,7 @@ let airports = [];
 async function setup() {
   // wait for the airports to load before carrying on
   // airports = await loadJSON("../json_data/all_public_airports.json");
-  airports = await loadJSON("../json_data/populated_places.json");
+  airports = await loadJSON("../json_data/all_public_airports.json");
 
   // canvas is twice as wide as it is tall (360° of lon by 180° of lat)
   let h = min(windowHeight, windowWidth / 2);
@@ -16,7 +16,6 @@ async function setup() {
 
 function draw() {
   background(0);
-  noStroke();
   fill(255, 255, 255, 150);
   stroke(255)
   for (let airport of airports) {
@@ -24,16 +23,9 @@ function draw() {
     let x = map(airport.lng, -180, 180, 0, width);
     let y = map(airport.lat, 90, -90, 0, height);
    
-    stroke( 255) 
+    stroke(255) 
     point( x,y)
-    // if(airport.size == "large"){
-    //   fill(255); 
-    //   text(airport.icao, x, y)
-    // }
-    //  if(airport.size == "medium"){
-    //   fill(255, 0, 0)
-    //   circle(x, y, 2)
-    // }
+  
    
     
     
