@@ -1,0 +1,25 @@
+{
+  // Stop autocomplete swapping what you type (e.g. circle → CSSNumericValue)
+  "editor.acceptSuggestionOnCommitCharacter": false,
+  "editor.acceptSuggestionOnEnter": "off",
+  "editor.tabCompletion": "on",
+
+  // Turn off AI ghost-text suggestions (Copilot etc.)
+  "editor.inlineSuggest.enabled": false,
+
+  // Keep the suggestion list, but only in code, not comments or strings
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": false,
+    "strings": false
+  },
+  "editor.suggestSelection": "first",
+
+  // Friendly defaults for p5 / beginners
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.fontSize": 16,
+  "editor.wordWrap": "on",
+  "editor.bracketPairColorization.enabled": true,
+  "files.autoSave": "afterDelay"
+}
