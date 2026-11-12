@@ -1,0 +1,9 @@
+{
+  "image": "dance_01.png",
+  "columns": 2,
+  "rows": 4,
+  "frameCount": 8,
+  "frameWidth": 544,
+  "frameHeight": 384,
+  "fps": 10.0
+}

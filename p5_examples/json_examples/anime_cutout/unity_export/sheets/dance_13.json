@@ -1,0 +1,9 @@
+{
+  "image": "dance_13.png",
+  "columns": 4,
+  "rows": 6,
+  "frameCount": 24,
+  "frameWidth": 500,
+  "frameHeight": 282,
+  "fps": 25.0
+}

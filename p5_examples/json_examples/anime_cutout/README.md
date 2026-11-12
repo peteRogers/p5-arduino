@@ -11,6 +11,8 @@ The GIFs come from the [nekos.best](https://nekos.best) API. A Python script run
 - `cutouts/` — the cut-out files made by the script (transparent animated WebP).
 - `cutouts.json` — the list of cut-outs that the sketch loads.
 - `requirements.txt` — the Python packages the script needs.
+- `export_for_unity.py` — turns the cut-outs into sprite sheets and transparent videos for Unity (see below).
+- `unity_export/` — the files made by `export_for_unity.py`.
 
 ## Running the sketch
 
@@ -62,6 +64,34 @@ At the top of `make_cutouts.py`:
 
 - `CATEGORY` — which kind of GIF to get, such as `dance`, `wave`, `hug`, `happy` or `cry`. The full list is at <https://nekos.best/api/v2/endpoints>.
 - `AMOUNT` — how many to get (20 at most).
+
+## Using the cut-outs in Unity
+
+`export_for_unity.py` reads the WebP files in `cutouts/` (it doesn't run the model again) and writes two versions of each one to `unity_export/`:
+
+- `sheets/<name>.png` — a sprite sheet with every frame in a grid, plus `<name>.json` with the columns, rows, frame count, frame size and frame rate.
+- `video/<name>.webm` — a VP8 WebM video with an alpha channel. This part needs ffmpeg (`brew install ffmpeg` on macOS).
+
+```
+python export_for_unity.py
+```
+
+Sheets are bigger than 2048 px, so they're shrunk to fit under 4096 px (`MAX_SHEET_SIZE`). Set `MAKE_SHEETS` or `MAKE_VIDEOS` to `False` to skip one.
+
+### Sprite sheet (simplest, works everywhere)
+
+1. Drag the PNG into Unity. In the Inspector set **Texture Type** to *Sprite (2D and UI)*, **Sprite Mode** to *Multiple*, and **Max Size** to *4096* (Unity's default of 2048 shrinks it). Click **Apply**.
+2. Open the **Sprite Editor**, choose **Slice → Grid By Cell Count**, and type the `columns` and `rows` from the sheet's JSON. Slice, then Apply.
+3. Expand the PNG in the Project window, select all the sprites (except any empty ones at the end), and drag them into the Scene. Unity makes an animation from them. Set its **Samples** (frame rate) to the `fps` from the JSON.
+
+### Video with alpha
+
+1. Drag the `.webm` into Unity. In the Inspector tick **Keep Alpha**, and Apply.
+2. Add a **Video Player** to a GameObject and set its clip to the video. Tick **Loop**.
+3. Set **Render Mode** to *Render Texture*, make a new Render Texture (Assets → Create → Render Texture) the same size as the video, and assign it.
+4. Show the Render Texture on a UI **Raw Image**, or on a quad with a transparent material (for example *Unlit/Transparent*).
+
+Videos are much smaller files than sheets, but sprite sheets are easier to time, flip and layer, and work on every platform.
 
 ## How it works
 
